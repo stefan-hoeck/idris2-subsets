@@ -1,0 +1,13 @@
+package subsets
+
+authors    = "stefan-hoeck"
+version    = "0.0.1"
+readme     = "README.md"
+license    = "BSD-2 Clause"
+
+sourcedir  = "src"
+depends    = base
+
+modules = Data.Subset.Interfaces
+        , Data.Subset.Predicates
+        , Data.Subset
