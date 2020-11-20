@@ -186,7 +186,7 @@ simply by writing dedicated boolean predicates and
 using `Is` alone. However, there are several reasons
 to provide additional combinators. First, we sometimes
 may like to combine structural predicates with
-primitive. Second, as is described below, I'm looking
+primitive ones. Second, as is described below, I'm looking
 into ways for weakening predicates, something that
 will be very hard to do without adding additional
 structure to predicates.
