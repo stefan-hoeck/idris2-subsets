@@ -6,6 +6,8 @@ import public Data.Subset.Interfaces
 import public Data.Subset.Predicates
 import public Data.Maybe
 
+%default total
+
 ||| Compile time refinement of values
 ||| If this does not work, the predicate in question
 ||| might contain a negation. If that's the case, try `refine'`.
