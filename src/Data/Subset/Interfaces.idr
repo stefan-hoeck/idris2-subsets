@@ -49,36 +49,36 @@ public export
 
 
 
-consInjective : All (p::ps) v -> (p v, All ps v)
+consInjective : And (p::ps) v -> (p v, And ps v)
 consInjective (prf :: prfs) = (prf, prfs)
 
 public export
-Predicate t (All []) where
+Predicate t (And []) where
   validate v = Yes Nil
 
 public export
-Predicate t p => Predicate t (All ps) => Predicate t (All (p :: ps)) where
+Predicate t p => Predicate t (And ps) => Predicate t (And (p :: ps)) where
   validate v with (validate {p = p} v)
     validate v | No contra = No (contra . fst . consInjective)
-    validate v | Yes phead with (validate {p = All ps} v)
+    validate v | Yes phead with (validate {p = And ps} v)
       validate v | Yes phead | Yes ptail = Yes $ phead :: ptail
       validate v | Yes phead | No contra = No (contra . snd . consInjective)
 
 
 
 public export
-Uninhabited (Any [] v) where
+Uninhabited (Or [] v) where
   uninhabited _ impossible
 
 public export
-Predicate t (Any []) where
+Predicate t (Or []) where
   validate v = No absurd
 
 public export
-Predicate t p => Predicate t (Any ps) => Predicate t (Any (p::ps)) where
+Predicate t p => Predicate t (Or ps) => Predicate t (Or (p::ps)) where
   validate v with (validate {p = p} v)
     validate v | Yes prf = Yes $ Z prf
-    validate v | No contra with (validate {p = Any ps} v)
+    validate v | No contra with (validate {p = Or ps} v)
       validate v | No contra | Yes prf = Yes $ S prf
       validate v | No contra | No contra2 =
         No $ \any => case any of

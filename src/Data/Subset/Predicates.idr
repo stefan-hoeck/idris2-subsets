@@ -70,7 +70,7 @@ data Is : (pred : t -> Bool) -> (v : t) -> Type where
 |||
 ||| ```idris example
 ||| IsShortNonEmptyString : String -> Type
-||| IsShortNonEmptyString = Via {a = String} length $ All [GT 0, LEQ 20]
+||| IsShortNonEmptyString = Via {a = String} length $ And [GT 0, LEQ 20]
 ||| ```
 public export
 data Via : (0 f : a -> b) -> (0 p : b -> Type) -> (v : a) -> Type where
@@ -79,16 +79,16 @@ data Via : (0 f : a -> b) -> (0 p : b -> Type) -> (v : a) -> Type where
 ||| Proof that all predicates in list `ps`
 ||| hold for the given value `v`
 public export
-data All : (0 ps : List (t -> Type)) -> (v : t) -> Type where
-  Nil  : All [] v
-  (::) : (prf : p v) -> All ps v -> All {t = t} (p :: ps) v 
+data And : (0 ps : List (t -> Type)) -> (v : t) -> Type where
+  Nil  : And [] v
+  (::) : (prf : p v) -> And ps v -> And {t = t} (p :: ps) v 
 
 ||| Proof that at least one predicate in a list `ps`
 ||| of predicates holds for the given value `v`.
 public export
-data Any : (0 ps : List (t -> Type)) -> (v : t) -> Type where
-  Z : (prf : p v) -> Any {t = t} (p :: ps) v
-  S : Any ps v    -> Any {t = t} (p :: ps) v
+data Or : (0 ps : List (t -> Type)) -> (v : t) -> Type where
+  Z : (prf : p v) -> Or {t = t} (p :: ps) v
+  S : Or ps v    -> Or {t = t} (p :: ps) v
 
 ||| Proof that the given predicate `p` does not hold for `v`.
 public export
@@ -132,7 +132,7 @@ LEQ a = Is (<= a)
 ||| Inclusive interval of numbers
 public export
 FromTo : Ord a => a -> a -> a -> Type
-FromTo mi ma = All [GEQ mi, LEQ ma]
+FromTo mi ma = And [GEQ mi, LEQ ma]
 
 --------------------------------------------------------------------------------
 --          Numeric Predicates
@@ -376,7 +376,7 @@ Control = Subset Char IsControl
 --------------------------------------------------------------------------------
 
 ||| Proof that a String is actually the empty string.
-||| This is often useful in combination with `Any`.
+||| This is often useful in combination with `Or`.
 |||
 ||| As an example, consider a predicate `IsEmail` for valid
 ||| email addresses, and an optional "eMail" field in a GUI
@@ -386,7 +386,7 @@ Control = Subset Char IsControl
 |||
 ||| ```idris example
 ||| OptionalEmail : Type
-||| OptionalEmail = Subset String $ Any [IsEmptyString, IsEmail]
+||| OptionalEmail = Subset String $ Or [IsEmptyString, IsEmail]
 ||| ```
 public export
 IsEmptyString : String -> Type
