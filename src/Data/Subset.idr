@@ -1,15 +1,10 @@
+||| Reexporting `Data.Subset.Interfaces` and `Data.Subset.Predicates`
+||| plus some utility functions.
 module Data.Subset
 
 import public Data.Subset.Interfaces
 import public Data.Subset.Predicates
 import public Data.Maybe
-
-||| Runtime refinement of values.
-public export
-refineMay : Predicate t p => (v : t) -> Maybe (Subset t p)
-refineMay v = case validate {p = p} v of
-                   (Yes prf) => Just (Element v prf)
-                   (No _)    => Nothing
 
 ||| Compile time refinement of values
 ||| If this does not work, the predicate in question
@@ -18,7 +13,7 @@ public export
 refine : (v : t) -> {auto 0 prf : p v} -> Subset t p
 refine v = Element v prf
 
-||| Like `refine` but goes via a propsition's `Predicate`
+||| Like `Data.Subset.refine` but goes via a propsition's `Predicate`
 ||| instance. This is necessary for instance for
 ||| compiletime verification of negations, for which
 ||| Idris2 is to able to come up with a value otherwise.
@@ -29,7 +24,6 @@ refine' :  {0 t : Type} -> {0 p : t -> Type}
         -> {auto prf : IsJust (refineMay {p = p} v)}
         -> Subset t p
 refine' v = fromJust (refineMay {p = p} v)
-
 
 public export
 fromInteger :  Num t

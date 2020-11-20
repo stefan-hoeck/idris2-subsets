@@ -13,6 +13,13 @@ interface Predicate t (p : t -> Type) | p where
   ||| Validates a value against the given predicate.
   validate : (v : t) -> Dec (p v)
 
+||| Runtime refinement of values.
+public export
+refineMay : Predicate t p => (v : t) -> Maybe (Subset t p)
+refineMay v = case validate {p = p} v of
+                   (Yes prf) => Just (Element v prf)
+                   (No _)    => Nothing
+
 public export
 Predicate (List a) NonEmpty where
   validate []       = No absurd
