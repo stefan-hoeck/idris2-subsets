@@ -9,7 +9,7 @@ import public Decidable.Equality
 ||| In order to verify a predicate to hold for a given value
 ||| at runtime, it has to implement this interface.
 public export
-interface Predicate t (p : t -> Type) | p where
+interface Predicate t (0 p : t -> Type) | p where
   ||| Validates a value against the given predicate.
   validate : (v : t) -> Dec (p v)
 
